@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "97010766040",
+    "project_id": "got-dished",
+    "storage_bucket": "got-dished.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97010766040:android:358458321a154dfc6447ad",
+        "android_client_info": {
+          "package_name": "com.example.gotdished"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "97010766040-89ohao7uhlgfval1o2dcflt384tpq9h7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMGprIasdwwjIbI5GV0_C0jnxdU63nN-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "97010766040-89ohao7uhlgfval1o2dcflt384tpq9h7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

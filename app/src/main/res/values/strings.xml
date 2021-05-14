@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Got Dished</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="login_text">Login</string>
+    <string name="create_account_text">Create Account</string>
+    <string name="hint_username">Username</string>
+    <string name="title_activity_recipes">RecipesActivity</string>
+
+    <!--  Recipes Tabbed Activity  -->
+    <string name="tab_dishes">Dishes</string>
+    <string name="tab_favorites">Favorites</string>
+    <string name="recipe_name">Recipe Name</string>
+    <string name="recipe_ttc_text">1 Hour 30 Minutes</string>
+    <string name="empty_list">No Recipes</string>
+    <string name="recipe_description">Placeholder image for recipe</string>
+    <string name="recipe_category">Category</string>
+    <string name="name_of_recipe">Name of Recipe</string>
+    <string name="save_recipe">Save Recipe</string>
+    <string name="add_steps">Add Steps</string>
+    <string name="add_equipment">Add Equip</string>
+    <string name="type_of_recipe">Type of Recipe</string>
+    <string name="image_of_recipe">Image of Recipe</string>
+    <string name="image_for_posting_recipe_image">Image for posting Recipe Image</string>
+    <string name="string_image_for_posting_recipe_image">Image for posting recipe image</string>
+    <string name="equipment_name_placeholder">Equipment Name</string>
+    <string name="remove">Remove</string>
+    <string name="step_description">The description of the step.</string>
+    <string name="description_of_step">Description of Step</string>
+
+    <string-array name="type_of_recipes">
+        <item>Breakfast</item>
+        <item>Lunch</item>
+        <item>Beverages</item>
+        <item>Appetizers</item>
+        <item>Soups</item>
+        <item>Salads</item>
+        <item>Beef</item>
+        <item>Poultry</item>
+        <item>Pork</item>
+        <item>Seafood</item>
+        <item>Vegetarian</item>
+        <item>Dessert</item>
+        <item>Pasta</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="time_to_completion">Time to Completion</string>
+    <string name="create_account_post_description">Create Account\'s post image button</string>
+    <string name="create_account_profile_image">Create Account profile image</string>
+    <string name="details_activity_image_description">Recipe image for Details Recipe Activity</string>
+    <string name="created_by">Created By:</string>
+    <string name="date_placeholder">May 1, 2021</string>
+    <string name="needed_equipment">Needed Equipment</string>
+    <string name="add_ingredients">Ingredients</string>
+    <string name="add_an_ingredient">Add an Ingredient</string>
+    <string name="equipment_placeholder">Oven, Knives, etc.</string>
+    <string name="needed_ingredients">Needed Ingredients</string>
+    <string name="ingredient_placeholder">Chicken, Rice, etc.</string>
+    <string name="steps">Steps</string>
+    <string name="got_dished">Got Dished</string>
+    <string name="menu_sign_out">Sign Out</string>
+</resources>
