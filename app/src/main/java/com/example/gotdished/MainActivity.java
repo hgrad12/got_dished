@@ -39,50 +39,43 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        FirebaseAuth.getInstance().signOut();
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() != null) {
-                    String userUuid = currentUser.getUid();
-                    FirebaseUtil.retrieveUsersCollection().whereEqualTo(UserValues.USER_ID, userUuid)
-                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                @Override
-                                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                                    if (error != null || value.getDocuments().isEmpty()) {
+        mAuthListener = firebaseAuth -> {
+            if (firebaseAuth.getCurrentUser() != null) {
+                String userUuid = currentUser.getUid();
+                FirebaseUtil.retrieveUsersCollection().whereEqualTo(UserValues.USER_ID, userUuid)
+                        .addSnapshotListener((value, error) -> {
+                            if (error != null || value.getDocuments().isEmpty()) {
 //                                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                                        return;
-                                    }
+                                return;
+                            }
 
-                                    currentUser = firebaseAuth.getCurrentUser();
+                            currentUser = firebaseAuth.getCurrentUser();
 
-                                    for (DocumentSnapshot snapshot: value.getDocuments()) {
-                                        Log.d(TAG, "userUuid:  " + userUuid);
-                                        api.setUsername(snapshot.getString(UserValues.USERNAME));
-                                        api.setUserId(userUuid);
-                                        api.setEmail(snapshot.getString(UserValues.EMAIL));
-                                        api.setCreateDate(snapshot.getDate(UserValues.CREATED_DATE));
-                                        api.setUpdatedDate(snapshot.getDate(UserValues.UPDATED_DATE));
-                                        api.setImageUrl(snapshot.getString(UserValues.IMAGE_URI));
+                            for (DocumentSnapshot snapshot: value.getDocuments()) {
+                                Log.d(TAG, "userUuid:  " + userUuid);
+                                api.setUsername(snapshot.getString(UserValues.USERNAME));
+                                api.setUserId(userUuid);
+                                api.setEmail(snapshot.getString(UserValues.EMAIL));
+                                api.setCreateDate(snapshot.getDate(UserValues.CREATED_DATE));
+                                api.setUpdatedDate(snapshot.getDate(UserValues.UPDATED_DATE));
+                                api.setImageUrl(snapshot.getString(UserValues.IMAGE_URI));
 
-                                        List<String> recipes = (List<String>) snapshot.get(UserValues.RECIPES);
-                                        api.setRecipes(recipes);
-                                        List<String> favorites = (List<String>) snapshot.get(UserValues.FAVORITES);
-                                        api.setFavorites(favorites);
+                                List<String> recipes = (List<String>) snapshot.get(UserValues.RECIPES);
+                                api.setRecipes(recipes);
+                                List<String> favorites = (List<String>) snapshot.get(UserValues.FAVORITES);
+                                api.setFavorites(favorites);
 
 //                                        startActivity(new Intent(MainActivity.this, RecipesActivity.class));
 //                                        finish();
-                                    }
-                                }
-                            });
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + currentUser.getUid());
+                            }
+                        });
+                Log.d(TAG, "onAuthStateChanged:signed_in:" + currentUser.getUid());
 
-                } else {
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
+            } else {
+                Log.d(TAG, "onAuthStateChanged:signed_out");
 //                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
 //                    finish();
-                }
             }
         };
 

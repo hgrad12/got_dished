@@ -7,6 +7,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gotdished.model.Recipe;
+import com.example.gotdished.util.DateFormatter;
 import com.example.gotdished.util.FirebaseUtil;
 import com.example.gotdished.util.RecipeValues;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -60,7 +61,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
                         category.setText(recipe.getCategory());
                         createdBy.setText(recipe.getCreatedBy());
-                        date.setText(recipe.getDateCreated().toString());
+                        date.setText(DateFormatter.getTimeAgo(recipe.getDateCreated()));
                         timeToCompletion.setText(recipe.getTimeToCompletion());
                         equipment.setText(listToString(recipe.getEquipment()));
                         ingredients.setText(ingredientsToString(recipe.getIngredients()));
