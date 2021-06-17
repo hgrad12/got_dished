@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:padding="24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/ingredients_popup_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textSize="18sp"
+                android:text="@string/add_ingredient"/>
+
+            <EditText
+                android:id="@+id/ingredients_popup_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ingredients_popup_title"
+                android:hint="@string/ingredient_name" />
+
+            <EditText
+                android:id="@+id/ingredients_popup_quantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ingredients_popup_name"
+                android:hint="@string/ingredients_quantity"
+                android:inputType="numberDecimal"/>
+
+            <EditText
+                android:id="@+id/ingredients_popup_measurement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:hint="@string/enter_measurement"
+                android:layout_below="@id/ingredients_popup_quantity"/>
+
+
+            <Button
+                android:id="@+id/ingredients_popup_save_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ingredients_popup_measurement"
+                android:layout_marginEnd="5dp"
+                android:background="@android:color/holo_red_light"
+                android:text="@string/add"
+                android:textSize="14sp"
+                app:backgroundTint="#F34C4C"
+                android:textStyle="bold"/>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.592" />
 
-    <EditText
+    <TextView
         android:id="@+id/step_row_description"
         android:layout_width="288dp"
         android:layout_height="71dp"

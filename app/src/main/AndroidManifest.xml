@@ -11,6 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GotDished">
+        <activity android:name=".RecipeSubmitActivity" />
+        <activity android:name=".StepsActivity" />
+        <activity android:name=".IngredientsActivity" />
         <activity android:name=".RecipeDetailsActivity" />
         <activity android:name=".CreateRecipeActivity" />
         <activity

@@ -1,17 +1,11 @@
 package com.example.gotdished;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,16 +14,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gotdished.adapter.OnRecipeItemClickListener;
-import com.example.gotdished.model.RecipeItem;
 import com.example.gotdished.adapter.RecipeItemRecyclerAdapter;
+import com.example.gotdished.model.RecipeItem;
 import com.example.gotdished.util.FirebaseUtil;
 import com.example.gotdished.util.RecipeItemValues;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class RecipesFragment extends Fragment implements OnRecipeItemClickListener {
@@ -53,35 +44,43 @@ public class RecipesFragment extends Fragment implements OnRecipeItemClickListen
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        FirebaseUtil.retrieveRecipeItemsCollection().limit(25)
+                .get().addOnCompleteListener(task -> {
+            if (task == null) return;
+
+            if (!task.isSuccessful()) return;
+
+            if (Objects.requireNonNull(task.getResult()).getDocuments().isEmpty()) {
+//                            noEntry.setVisibility(View.VISIBLE);
+                return;
+            }
+
+            for (DocumentSnapshot snapshot: task.getResult().getDocuments()) {
+                RecipeItem item = new RecipeItem(snapshot.getString(RecipeItemValues.UUID),
+                        snapshot.getString(RecipeItemValues.NAME),
+                        snapshot.getString(RecipeItemValues.TIME_TO_COMPLETION),
+                        snapshot.getString(RecipeItemValues.IMAGE_URI),
+                        snapshot.getString(RecipeItemValues.CATEGORY));
+                if (listOfRecipeItems.contains(item))
+                    continue;
+                listOfRecipeItems.add(item);
+            }
+            adapter = new RecipeItemRecyclerAdapter(listOfRecipeItems, this::onRecipeItemClicked);
+            recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        }).addOnFailureListener(e -> Log.d(TAG, "issue retrieving recipe items."));
+
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         if (savedInstanceState != null) {
             listOfRecipeItems.addAll(savedInstanceState.getParcelableArrayList(RECIPE_ITEMS));
-        } else {
-            //Todo: add the RecipesItemViewModel here
-            FirebaseUtil.retrieveRecipeItemsCollection().limit(25)
-                    .get().addOnCompleteListener(task -> {
-                        if (task == null) return;
-
-                        if (!task.isSuccessful()) return;
-
-                        if (task.getResult().getDocuments().isEmpty()) {
-//                            noEntry.setVisibility(View.VISIBLE);
-                            return;
-                        }
-
-                        for (DocumentSnapshot snapshot: task.getResult().getDocuments()) {
-                            listOfRecipeItems.add(new RecipeItem(snapshot.getString(RecipeItemValues.UUID),
-                                    snapshot.getString(RecipeItemValues.NAME),
-                                    snapshot.getString(RecipeItemValues.TIME_TO_COMPLETION),
-                                    snapshot.getString(RecipeItemValues.IMAGE_URI),
-                                    snapshot.getString(RecipeItemValues.CATEGORY)));
-                        }
-                        adapter = new RecipeItemRecyclerAdapter(listOfRecipeItems, this::onRecipeItemClicked);
-                        recyclerView.setAdapter(adapter);
-                        adapter.notifyDataSetChanged();
-                    }).addOnFailureListener(e -> Log.d(TAG, "issue retrieving recipe items."));
         }
     }
 

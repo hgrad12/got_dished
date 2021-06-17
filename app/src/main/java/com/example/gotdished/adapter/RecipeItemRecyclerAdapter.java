@@ -59,8 +59,10 @@ public class RecipeItemRecyclerAdapter extends RecyclerView.Adapter<RecipeItemRe
             name = itemView.findViewById(R.id.recipe_name);
             ttc = itemView.findViewById(R.id.recipe_ttc);
             category = itemView.findViewById(R.id.recipe_category);
+            image = itemView.findViewById(R.id.recipe_image);
 
             this.onRecipeItemClickListener = onClickListener;
+            itemView.setOnClickListener(this);
         }
 
         @Override

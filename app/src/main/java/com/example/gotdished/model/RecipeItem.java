@@ -3,10 +3,13 @@ package com.example.gotdished.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.Nullable;
+
 import com.example.gotdished.util.RecipeItemValues;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class RecipeItem implements Parcelable {
     private String recipeUuid;
@@ -107,5 +110,14 @@ public class RecipeItem implements Parcelable {
         dest.writeString(timeToCompletion);
         dest.writeString(imageUri);
         dest.writeString(category);
+    }
+
+    @Override
+    public boolean equals(@Nullable @org.jetbrains.annotations.Nullable Object obj) {
+        if (!(obj instanceof RecipeItem)) return false;
+
+        RecipeItem o = (RecipeItem)obj;
+
+        return Objects.equals(recipeUuid, o.getRecipeUuid());
     }
 }

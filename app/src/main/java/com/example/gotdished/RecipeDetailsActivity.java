@@ -4,21 +4,17 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gotdished.model.Recipe;
-import com.example.gotdished.model.Step;
 import com.example.gotdished.util.FirebaseUtil;
 import com.example.gotdished.util.RecipeValues;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import static com.example.gotdished.util.RecipeUtil.ingredientsToString;
+import static com.example.gotdished.util.RecipeUtil.listToString;
+import static com.example.gotdished.util.RecipeUtil.stepsToString;
 
 public class RecipeDetailsActivity extends AppCompatActivity {
     private TextView category, createdBy, date, timeToCompletion, equipment, ingredients, steps;
@@ -67,7 +63,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                         date.setText(recipe.getDateCreated().toString());
                         timeToCompletion.setText(recipe.getTimeToCompletion());
                         equipment.setText(listToString(recipe.getEquipment()));
-                        ingredients.setText(listToString(recipe.getIngredients()));
+                        ingredients.setText(ingredientsToString(recipe.getIngredients()));
                         steps.setText(stepsToString(recipe.getSteps()));
                         Picasso.get().load(recipe.getImageUri())
                                 .placeholder(R.drawable.dish_placeholder)
@@ -76,20 +72,4 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 });
     }
 
-    private String listToString(List<String> list){
-        if (list.isEmpty()) return "";
-
-        return list.stream().collect(Collectors.joining(", "));
-    }
-
-    private String stepsToString(List<Step> steps) {
-        if (steps.isEmpty()) return "";
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(1 + ".\t").append(steps.get(0).getDetails());
-        for (int x = 1; x < steps.size(); x++) {
-            sb.append("\n\n").append(x + 1).append(".\t").append(steps.get(0).getDetails());
-        }
-        return sb.toString();
-    }
 }

@@ -1,25 +1,25 @@
 package com.example.gotdished.adapter;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gotdished.R;
+import com.example.gotdished.model.Ingredient;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 public class IngredientRecyclerAdapter extends RecyclerView.Adapter<IngredientRecyclerAdapter.ViewHolder>  {
     private static final String TAG = "IngredientRecyclerAdapter.class";
-    private List<String> listOfIngredients;
+    private final List<Ingredient> listOfIngredients;
 
-    public IngredientRecyclerAdapter(List<String> listOfIngredients) {
+    public IngredientRecyclerAdapter(List<Ingredient> listOfIngredients) {
         this.listOfIngredients = listOfIngredients;
     }
 
@@ -31,21 +31,9 @@ public class IngredientRecyclerAdapter extends RecyclerView.Adapter<IngredientRe
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String ingredient = listOfIngredients.get(position);
-        holder.name.setText(ingredient);
-
-        holder.name.addTextChangedListener(new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {}
-
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                listOfIngredients.set(position, s.toString());
-            }
-        });
+        Ingredient ingredient = listOfIngredients.get(position);
+        holder.name.setText(ingredient.getName());
+        holder.quantity.setText(MessageFormat.format("{0} {1}", ingredient.getQuantity(), ingredient.getMeasurement()));
     }
 
     @Override
@@ -54,11 +42,12 @@ public class IngredientRecyclerAdapter extends RecyclerView.Adapter<IngredientRe
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public EditText name;
+        public TextView name, quantity;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             name = itemView.findViewById(R.id.ingredient_name);
+            quantity = itemView.findViewById(R.id.ingredient_quantity);
             itemView.findViewById(R.id.ingredient_remove).setOnClickListener(this);
         }
 

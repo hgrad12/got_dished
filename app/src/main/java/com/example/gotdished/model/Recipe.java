@@ -7,6 +7,7 @@ import com.example.gotdished.util.RecipeValues;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.ServerTimestamp;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class Recipe implements Parcelable {
     private String createdBy;
     private List<Step> steps;
     private List<String> equipment;
-    private List<String> ingredients; //Todo: convert to a list of Ingredient (Object)
+    private List<Ingredient> ingredients; //Todo: convert to a list of Ingredient (Object)
     private String category;
     private String timeToCompletion;
 
@@ -30,7 +31,7 @@ public class Recipe implements Parcelable {
     @ServerTimestamp private Timestamp dateModified;
 
     public Recipe(String name, String imageUri, String recipeUuid, String userUuid, String createdBy,
-                  List<Step> steps, List<String> equipment, List<String> ingredients, String category,
+                  List<Step> steps, List<String> equipment, List<Ingredient> ingredients, String category,
                   String timeToCompletion, Timestamp dateCreated, Timestamp dateModified) {
         this.name = name;
         this.imageUri = imageUri;
@@ -55,7 +56,8 @@ public class Recipe implements Parcelable {
         steps = new ArrayList<>();
         in.readList(steps, Step.class.getClassLoader());
         equipment = in.createStringArrayList();
-        ingredients = in.createStringArrayList();
+        ingredients = new ArrayList<>();
+        in.readList(ingredients, Ingredient.class.getClassLoader());
         category = in.readString();
         timeToCompletion = in.readString();
         dateCreated = new Timestamp(new Date(in.readLong()));
@@ -169,11 +171,11 @@ public class Recipe implements Parcelable {
         return 0;
     }
 
-    public List<String> getIngredients() {
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(List<String> ingredients) {
+    public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
@@ -203,10 +205,10 @@ public class Recipe implements Parcelable {
         dest.writeString(recipeUuid);
         dest.writeList(steps);
         dest.writeStringList(equipment);
-        dest.writeStringList(ingredients);
+        dest.writeList(ingredients);
         dest.writeString(category);
         dest.writeString(timeToCompletion);
-        dest.writeLong(dateCreated.getSeconds());
-        dest.writeLong(dateModified.getSeconds());
+        dest.writeLong((dateCreated == null)?null:dateCreated.getSeconds());
+        dest.writeLong((dateModified == null)?null:dateModified.getSeconds());
     }
 }
