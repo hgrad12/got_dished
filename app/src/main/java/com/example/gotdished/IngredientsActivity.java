@@ -1,17 +1,15 @@
 package com.example.gotdished;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+import android.widget.EditText;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
 import com.example.gotdished.adapter.IngredientRecyclerAdapter;
 import com.example.gotdished.model.Ingredient;
@@ -52,7 +50,7 @@ public class IngredientsActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.ingredientsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setHasFixedSize(true);
-        adapter = new IngredientRecyclerAdapter(listOfIngredients);
+        adapter = new IngredientRecyclerAdapter(listOfIngredients, this);
         recyclerView.setAdapter(adapter);
 
         findViewById(R.id.ingredient_prev_button).setOnClickListener(this::prevButtonClicked);
@@ -137,5 +135,4 @@ public class IngredientsActivity extends AppCompatActivity {
         }
         return false;
     }
-
 }

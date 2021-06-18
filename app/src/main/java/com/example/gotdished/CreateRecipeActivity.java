@@ -9,11 +9,13 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gotdished.model.Recipe;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
 
 import mabbas007.tagsedittext.TagsEditText;
@@ -78,6 +80,11 @@ public class CreateRecipeActivity extends AppCompatActivity {
     }
 
     private boolean hasValidationErrors(String nm, String catg, String ttc){
+        if (uri == null) {
+            Toast.makeText(this, "Add an image", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
         if (nm.isEmpty()) {
             name.setError("Name required");
             name.requestFocus();

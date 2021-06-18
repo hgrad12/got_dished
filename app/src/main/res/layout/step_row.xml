@@ -26,30 +26,46 @@
 
     <TextView
         android:id="@+id/step_row_description"
-        android:layout_width="288dp"
-        android:layout_height="71dp"
+        android:layout_width="235dp"
+        android:layout_height="66dp"
         android:layout_gravity="center_vertical"
+        android:layout_marginStart="64dp"
+        android:background="@android:color/transparent"
+        android:hint="@string/description_of_step"
+        android:lines="3"
         android:paddingLeft="5dp"
         android:paddingTop="5dp"
-        android:hint="@string/description_of_step"
-        android:background="@android:color/transparent"
         android:textSize="14sp"
-        android:lines="3"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/step_row_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/step_row_remove"
+        app:layout_constraintHorizontal_bias="0.543"
+        app:layout_constraintStart_toEndOf="@+id/step_row_description"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.489"
+        app:srcCompat="@drawable/ic_baseline_mode_24" />
 
     <ImageView
         android:id="@+id/step_row_remove"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.733"
+        app:layout_constraintHorizontal_bias="0.908"
         app:layout_constraintStart_toEndOf="@+id/step_row_description"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.492"
+        app:layout_constraintVertical_bias="0.489"
         app:srcCompat="@drawable/ic_baseline_delete_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

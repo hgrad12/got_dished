@@ -15,6 +15,18 @@ public class Ingredient implements Serializable {
         this.measurement = measurement;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setMeasurement(String measurement) {
+        this.measurement = measurement;
+    }
+
     public String getName() {
         return name;
     }
