@@ -36,14 +36,16 @@ public class StepsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_steps);
 
+        listOfSteps = new ArrayList<>();
+
         if (getIntent().getExtras() != null) {
             recipe = (Recipe) getIntent().getParcelableExtra("recipe");
             uri = getIntent().getStringExtra("imageUri");
+            listOfSteps.addAll(recipe.getSteps());
         } else {
             recipe = new Recipe();
         }
 
-        listOfSteps = new ArrayList<>();
         RecyclerView recyclerView = findViewById(R.id.stepsRecyclerView);
         adapter = new StepRecyclerAdapter(listOfSteps, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));

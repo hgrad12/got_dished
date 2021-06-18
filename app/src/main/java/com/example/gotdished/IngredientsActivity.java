@@ -36,14 +36,15 @@ public class IngredientsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ingredients);
 
         //todo: retrieve the Recipe object from the bundle
+
+        listOfIngredients = new ArrayList<>();
         if (getIntent().getExtras() != null) {
             recipe = (Recipe) getIntent().getParcelableExtra("recipe");
             uri = getIntent().getStringExtra("imageUri");
+            listOfIngredients.addAll(recipe.getIngredients());
         } else {
             recipe = new Recipe();
         }
-
-        listOfIngredients = new ArrayList<>();
 
         findViewById(R.id.ingredientsFloatingActionButton).setOnClickListener(this::addAnIngredient);
 

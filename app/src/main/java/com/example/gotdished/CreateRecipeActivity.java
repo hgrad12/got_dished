@@ -18,6 +18,8 @@ import com.example.gotdished.model.Recipe;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.Timestamp;
 
+import java.util.Arrays;
+
 import mabbas007.tagsedittext.TagsEditText;
 
 public class CreateRecipeActivity extends AppCompatActivity {
@@ -37,11 +39,6 @@ public class CreateRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_recipe);
 
-        if (getIntent().getExtras() != null) {
-            recipe = (Recipe) getIntent().getParcelableExtra("recipe");
-        } else {
-            recipe = new Recipe();
-        }
         recipeImage = findViewById(R.id.create_recipe_image);
         findViewById(R.id.create_recipe_post_button).setOnClickListener(this::onPostImageClicked);
         name = findViewById(R.id.create_recipe_name);
@@ -52,6 +49,21 @@ public class CreateRecipeActivity extends AppCompatActivity {
         category.setAdapter(categoryAdapter);
         equipment = findViewById(R.id.create_recipe_equipment);
         findViewById(R.id.create_recipe_next_button).setOnClickListener(this::onNextButtonClicked);
+
+        if (getIntent().getExtras() != null) {
+            recipe = (Recipe) getIntent().getParcelableExtra("recipe");
+            name.setText(recipe.getName());
+            timeToCompletion.setText(recipe.getTimeToCompletion());
+            category.setText(recipe.getCategory());
+            String[] list = new String[recipe.getEquipment().size()];
+            list = recipe.getEquipment().toArray(list);
+            equipment.setTags(list);
+            uri = Uri.parse(getIntent().getStringExtra("imageUri"));
+            recipeImage.setImageURI(uri);
+        } else {
+            recipe = new Recipe();
+        }
+
     }
 
     private void onNextButtonClicked(View view) {
