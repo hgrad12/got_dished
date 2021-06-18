@@ -17,7 +17,7 @@ import java.util.List;
 
 public class RecipeItemRecyclerAdapter extends RecyclerView.Adapter<RecipeItemRecyclerAdapter.ViewHolder> {
     private final List<RecipeItem> listOfRecipes;
-    private final OnRecipeItemClickListener onClickListener;
+    private OnRecipeItemClickListener onClickListener;
 
     public RecipeItemRecyclerAdapter(List<RecipeItem> listOfRecipes, OnRecipeItemClickListener onRecipeItemClickListener) {
         this.listOfRecipes = listOfRecipes;
@@ -28,7 +28,7 @@ public class RecipeItemRecyclerAdapter extends RecyclerView.Adapter<RecipeItemRe
     @Override
     public RecipeItemRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipes_row, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, onClickListener);
     }
 
     @Override
@@ -54,21 +54,24 @@ public class RecipeItemRecyclerAdapter extends RecyclerView.Adapter<RecipeItemRe
         public TextView name, ttc, category;
         public ImageView image;
         OnRecipeItemClickListener onRecipeItemClickListener;
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnRecipeItemClickListener onRecipeItemClickListener) {
             super(itemView);
             name = itemView.findViewById(R.id.recipe_name);
             ttc = itemView.findViewById(R.id.recipe_ttc);
             category = itemView.findViewById(R.id.recipe_category);
             image = itemView.findViewById(R.id.recipe_image);
 
-            this.onRecipeItemClickListener = onClickListener;
+            this.onRecipeItemClickListener = onRecipeItemClickListener;
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            RecipeItem item = listOfRecipes.get(getAdapterPosition());
-            onRecipeItemClickListener.onRecipeItemClicked(item);
+            onRecipeItemClickListener.onRecipeItemClick(getAdapterPosition());
         }
+    }
+
+    public interface OnRecipeItemClickListener{
+        void onRecipeItemClick(int position);
     }
 }

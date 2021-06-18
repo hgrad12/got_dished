@@ -13,6 +13,8 @@ import com.example.gotdished.util.RecipeValues;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
+import java.text.MessageFormat;
+
 import static com.example.gotdished.util.RecipeUtil.ingredientsToString;
 import static com.example.gotdished.util.RecipeUtil.listToString;
 import static com.example.gotdished.util.RecipeUtil.stepsToString;
@@ -60,7 +62,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                         Recipe recipe = snapshot.toObject(Recipe.class);
 
                         category.setText(recipe.getCategory());
-                        createdBy.setText(recipe.getCreatedBy());
+                        createdBy.setText(MessageFormat.format("Created By: {0}", recipe.getCreatedBy()));
                         date.setText(DateFormatter.getTimeAgo(recipe.getDateCreated()));
                         timeToCompletion.setText(recipe.getTimeToCompletion());
                         equipment.setText(listToString(recipe.getEquipment()));

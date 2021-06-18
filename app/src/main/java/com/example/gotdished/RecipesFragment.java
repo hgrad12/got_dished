@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.gotdished.adapter.OnRecipeItemClickListener;
 import com.example.gotdished.adapter.RecipeItemRecyclerAdapter;
 import com.example.gotdished.model.RecipeItem;
 import com.example.gotdished.util.FirebaseUtil;
@@ -23,7 +22,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class RecipesFragment extends Fragment implements OnRecipeItemClickListener {
+public class RecipesFragment extends Fragment implements RecipeItemRecyclerAdapter.OnRecipeItemClickListener {
     private static final String TAG = "RecipesFragment";
 //    private TextView noEntry;
     private RecyclerView recyclerView;
@@ -68,7 +67,7 @@ public class RecipesFragment extends Fragment implements OnRecipeItemClickListen
                     continue;
                 listOfRecipeItems.add(item);
             }
-            adapter = new RecipeItemRecyclerAdapter(listOfRecipeItems, this::onRecipeItemClicked);
+            adapter = new RecipeItemRecyclerAdapter(listOfRecipeItems, this);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }).addOnFailureListener(e -> Log.d(TAG, "issue retrieving recipe items."));
@@ -103,10 +102,9 @@ public class RecipesFragment extends Fragment implements OnRecipeItemClickListen
     }
 
     @Override
-    public void onRecipeItemClicked(RecipeItem item) {
-        Log.d("RecipesFragment", item.getName());
+    public void onRecipeItemClick(int position) {
         Intent intent = new Intent(getActivity(), RecipeDetailsActivity.class);
-        intent.putExtra("recipeUuid", item.getRecipeUuid());
+        intent.putExtra("recipeUuid", listOfRecipeItems.get(position).getRecipeUuid());
         startActivity(intent);
     }
 }

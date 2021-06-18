@@ -1,16 +1,11 @@
 package com.example.gotdished;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,21 +13,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.gotdished.adapter.OnRecipeItemClickListener;
 import com.example.gotdished.model.RecipeItem;
 import com.example.gotdished.adapter.RecipeItemRecyclerAdapter;
 import com.example.gotdished.util.FirebaseUtil;
 import com.example.gotdished.util.RecipeItemValues;
 import com.example.gotdished.util.UserApi;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
-public class FavoritesFragment extends Fragment implements OnRecipeItemClickListener {
+public class FavoritesFragment extends Fragment implements RecipeItemRecyclerAdapter.OnRecipeItemClickListener {
     private static final String TAG = "FavoritesFragment";
 //    private TextView noEntry;
     private RecyclerView recyclerView;
@@ -102,10 +92,9 @@ public class FavoritesFragment extends Fragment implements OnRecipeItemClickList
     }
 
     @Override
-    public void onRecipeItemClicked(RecipeItem item) {
-        Log.d("FavoritesFragment", item.getName());
+    public void onRecipeItemClick(int position) {
         Intent intent = new Intent(getActivity(), RecipeDetailsActivity.class);
-        intent.putExtra("recipeUuid", item.getRecipeUuid());
+        intent.putExtra("recipeUuid", listOfRecipeItems.get(position));
         startActivity(intent);
     }
 }
