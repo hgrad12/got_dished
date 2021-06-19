@@ -120,13 +120,13 @@ public class IngredientRecyclerAdapter extends RecyclerView.Adapter<IngredientRe
         }
 
         if (quantity.getText().toString().trim().isEmpty()) {
-            quantity.setError("Password required");
+            quantity.setError("Quantity required");
             quantity.requestFocus();
             return true;
         }
 
         if (measurement.getText().toString().trim().isEmpty()) {
-            measurement.setError("Password required");
+            measurement.setError("Measurement required");
             measurement.requestFocus();
             return true;
         }
