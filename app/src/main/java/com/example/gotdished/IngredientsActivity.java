@@ -108,8 +108,6 @@ public class IngredientsActivity extends AppCompatActivity {
         Ingredient ingredient = new Ingredient(nm, quantityValue, measure);
         listOfIngredients.add(ingredient);
 
-        Snackbar.make(view, "Item was added!", Snackbar.LENGTH_SHORT).show();
-
         new Handler().postDelayed(() -> {
             adapter.notifyDataSetChanged();
             dialog.dismiss();

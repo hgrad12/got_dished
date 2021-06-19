@@ -110,7 +110,6 @@ public class StepsActivity extends AppCompatActivity {
         }
 
         listOfSteps.add(new Step(d));
-        Snackbar.make(view, "Step was added!", Snackbar.LENGTH_SHORT).show();
 
         new Handler().postDelayed(() -> {
             dialog.dismiss();
