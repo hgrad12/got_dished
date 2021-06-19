@@ -5,9 +5,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,7 +19,10 @@ import com.example.gotdished.model.Recipe;
 import com.example.gotdished.model.Step;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class StepsActivity extends AppCompatActivity {
@@ -50,6 +56,9 @@ public class StepsActivity extends AppCompatActivity {
         adapter = new StepRecyclerAdapter(listOfSteps, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         recyclerView.setAdapter(adapter);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         findViewById(R.id.stepsFloatingActionButton).setOnClickListener(this::addAStep);
 
@@ -108,4 +117,27 @@ public class StepsActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
         }, 120);
     }
+
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END, 0) {
+        @Override
+        public boolean onMove(@NonNull @NotNull RecyclerView recyclerView,
+                              @NonNull @NotNull RecyclerView.ViewHolder viewHolder,
+                              @NonNull @NotNull RecyclerView.ViewHolder target) {
+            int fromPosition = viewHolder.getAdapterPosition();
+            int toPosition = target.getAdapterPosition();
+
+            ((TextView)viewHolder.itemView.findViewById(R.id.step_row_number)).setText(String.valueOf(toPosition + 1));
+            ((TextView)target.itemView.findViewById(R.id.step_row_number)).setText(String.valueOf(fromPosition + 1));
+
+            Collections.swap(listOfSteps, fromPosition, toPosition);
+            recyclerView.getAdapter().notifyItemMoved(fromPosition, toPosition);
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull @NotNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+        }
+    };
 }
