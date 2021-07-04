@@ -58,14 +58,15 @@ public class FavoritesFragment extends Fragment implements RecipeItemRecyclerAda
                         }
 
                         for (DocumentSnapshot snapshot: task.getResult().getDocuments()) {
+                            Long likes = snapshot.getLong(RecipeItemValues.NUMBER_OF_LIKES);
                             listOfRecipeItems.add(new RecipeItem(snapshot.getString(RecipeItemValues.UUID),
                                     snapshot.getString(RecipeItemValues.NAME),
                                     snapshot.getString(RecipeItemValues.TIME_TO_COMPLETION),
                                     snapshot.getString(RecipeItemValues.IMAGE_URI),
-                                    snapshot.getString(RecipeItemValues.CATEGORY)));
+                                    snapshot.getString(RecipeItemValues.CATEGORY), (likes == null)?0l:likes));
                         }
-                        adapter = new RecipeItemRecyclerAdapter(listOfRecipeItems, this);
-                        recyclerView.setAdapter(adapter);
+//                        adapter = new RecipeItemRecyclerAdapter(listOfRecipeItems, ,this);
+//                        recyclerView.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                     }).addOnFailureListener(error -> {
                 Log.d(TAG, "Issue retrieving favorites list");

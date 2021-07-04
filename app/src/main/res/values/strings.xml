@@ -76,4 +76,6 @@
     <string name="step_description_hint">Example: Boil the water</string>
     <string name="confirm">Confirm</string>
     <string name="confirmation">Confirmation</string>
+    <string name="like_image_button">Like image button</string>
+    <string name="likes_placeholder">1000</string>
 </resources>

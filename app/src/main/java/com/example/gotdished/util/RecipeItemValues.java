@@ -6,4 +6,5 @@ public class RecipeItemValues {
     public static final String TIME_TO_COMPLETION = "recipe_time_to_completion";
     public static final String IMAGE_URI = "recipe_image_uri";
     public static final String CATEGORY = "recipe_category";
+    public static final String NUMBER_OF_LIKES = "recipe_likes";
 }

@@ -17,15 +17,27 @@ public class RecipeItem implements Parcelable {
     private String timeToCompletion;
     private String imageUri;
     private String category;
+    private long numOfLikes;
 
     public RecipeItem(){}
 
-    public RecipeItem(String recipeUuid, String name, String timeToCompletion, String imageUri, String category) {
+    public RecipeItem(String recipeUuid, String name, String timeToCompletion, String imageUri,
+                      String category, long numOfLikes) {
         this.recipeUuid = recipeUuid;
         this.name = name;
         this.timeToCompletion = timeToCompletion;
         this.imageUri = imageUri;
         this.category = category;
+        this.numOfLikes = numOfLikes;
+    }
+
+    public RecipeItem(RecipeItem other){
+        recipeUuid = other.getRecipeUuid();
+        name = other.getName();
+        timeToCompletion = other.getTimeToCompletion();
+        imageUri = other.getImageUri();
+        category = other.getCategory();
+        numOfLikes = other.getNumOfLikes();
     }
 
     protected RecipeItem(Parcel in) {
@@ -34,6 +46,7 @@ public class RecipeItem implements Parcelable {
         timeToCompletion = in.readString();
         imageUri = in.readString();
         category = in.readString();
+        numOfLikes = in.readLong();
     }
 
     public static final Creator<RecipeItem> CREATOR = new Creator<RecipeItem>() {
@@ -50,6 +63,14 @@ public class RecipeItem implements Parcelable {
 
     public String getRecipeUuid() {
         return recipeUuid;
+    }
+
+    public long getNumOfLikes() {
+        return numOfLikes;
+    }
+
+    public void setNumOfLikes(long numOfLikes) {
+        this.numOfLikes = numOfLikes;
     }
 
     public void setRecipeUuid(String recipeUuid) {
@@ -100,6 +121,7 @@ public class RecipeItem implements Parcelable {
         recipeItem.put(RecipeItemValues.TIME_TO_COMPLETION, timeToCompletion);
         recipeItem.put(RecipeItemValues.IMAGE_URI, imageUri);
         recipeItem.put(RecipeItemValues.CATEGORY, category);
+        recipeItem.put(RecipeItemValues.NUMBER_OF_LIKES, numOfLikes);
         return recipeItem;
     }
 
@@ -110,6 +132,7 @@ public class RecipeItem implements Parcelable {
         dest.writeString(timeToCompletion);
         dest.writeString(imageUri);
         dest.writeString(category);
+        dest.writeLong(numOfLikes);
     }
 
     @Override

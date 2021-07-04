@@ -17,6 +17,7 @@ import com.example.gotdished.adapter.RecipeItemRecyclerAdapter;
 import com.example.gotdished.model.RecipeItem;
 import com.example.gotdished.util.FirebaseUtil;
 import com.example.gotdished.util.RecipeItemValues;
+import com.example.gotdished.util.UserApi;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class RecipesFragment extends Fragment implements RecipeItemRecyclerAdapt
     private RecipeItemRecyclerAdapter adapter;
     private ArrayList<RecipeItem> listOfRecipeItems;
     private static final String RECIPE_ITEMS = "recipe_items";
+    private final UserApi api = new UserApi().getInstance();
 
     public RecipesFragment(){}
 
@@ -58,16 +60,17 @@ public class RecipesFragment extends Fragment implements RecipeItemRecyclerAdapt
             }
 
             for (DocumentSnapshot snapshot: task.getResult().getDocuments()) {
+                Long likes = snapshot.getLong(RecipeItemValues.NUMBER_OF_LIKES);
                 RecipeItem item = new RecipeItem(snapshot.getString(RecipeItemValues.UUID),
                         snapshot.getString(RecipeItemValues.NAME),
                         snapshot.getString(RecipeItemValues.TIME_TO_COMPLETION),
                         snapshot.getString(RecipeItemValues.IMAGE_URI),
-                        snapshot.getString(RecipeItemValues.CATEGORY));
+                        snapshot.getString(RecipeItemValues.CATEGORY), (likes == null)?0l:likes);
                 if (listOfRecipeItems.contains(item))
                     continue;
                 listOfRecipeItems.add(item);
             }
-            adapter = new RecipeItemRecyclerAdapter(listOfRecipeItems, this);
+            adapter = new RecipeItemRecyclerAdapter(getContext(), listOfRecipeItems, api.getUserId(), this);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }).addOnFailureListener(e -> Log.d(TAG, "issue retrieving recipe items."));

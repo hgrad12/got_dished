@@ -13,4 +13,6 @@
 
     <color name="startGColor">#659999</color>
     <color name="endGColor">#F4791F</color>
+
+    <color name="like_color">#E32C2C</color>
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,52 +10,94 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/recipe_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/recipe_category"
-            android:paddingBottom="5dp"
-            android:textSize="18sp"
-            android:textStyle="bold"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
-            android:textColor="@android:color/holo_green_light"/>
+            android:paddingBottom="5dp"
+            android:text="@string/recipe_category"
+            android:textColor="@android:color/holo_green_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/recipe_image"
-            android:layout_width="360dp"
-            android:layout_height="360dp"
-            android:layout_gravity="center_horizontal"
-            android:adjustViewBounds="true"
-            android:cropToPadding="true"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/dish_placeholder"
-            android:contentDescription="@string/recipe_description" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/recipe_image"
+                android:layout_width="360dp"
+                android:layout_height="360dp"
+                android:layout_gravity="center_horizontal"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/recipe_description"
+                android:cropToPadding="true"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/dish_placeholder" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/recipe_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.889"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.104"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/recipe_num_likes"
+                    android:textSize="18sp"
+                    android:text="@string/likes_placeholder"/>
+
+                <ImageButton
+                    android:id="@+id/recipe_like_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/like_image_button"
+                    app:srcCompat="@drawable/ic_baseline_favorite_border_48" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/recipe_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/recipe_name"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
+            android:text="@string/recipe_name"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/recipe_ttc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/recipe_ttc"
-            android:textSize="18sp"
             android:padding="10dp"
-            android:paddingTop="15dp"
             android:paddingStart="20dp"
+            android:paddingTop="15dp"
             android:paddingEnd="20dp"
-            android:textStyle="bold"
-            android:text="@string/recipe_ttc_text"/>
+            android:text="@string/recipe_ttc_text"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

@@ -101,7 +101,7 @@ public class RecipeSubmitActivity extends AppCompatActivity {
                     Map<String, Object> rec = recipe.toMap();
 
                     Map<String, Object> recipeItem = new RecipeItem(recipeUUid, recipe.getName(), recipe.getTimeToCompletion(),
-                            imageUrl, recipe.getCategory()).toMap();
+                            imageUrl, recipe.getCategory(), 0l).toMap();
 
                     recipeRef.set(rec).addOnSuccessListener(aVoid ->
                             FirebaseUtil.retrieveRecipeItemsCollection().document()
