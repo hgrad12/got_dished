@@ -20,6 +20,7 @@ import com.example.gotdished.util.FirebaseUtil;
 import com.example.gotdished.util.RecipeItemValues;
 import com.example.gotdished.util.UserApi;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -46,6 +47,7 @@ public class FavoritesFragment extends Fragment implements RecipeItemRecyclerAda
         FirebaseUtil.retrieveFavoritesCollection()
                 .whereEqualTo(FavoriteValues.USER_UUID, userId)
                 .limit(25)
+                .orderBy(FavoriteValues.DATE_CREATED, Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) return;
