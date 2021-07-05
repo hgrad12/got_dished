@@ -12,7 +12,7 @@ public class FirebaseUtil {
     private static final String USERS_COLLECTION = "Users";
     private static final String RECIPES_COLLECTION = "Recipes";
     private static final String RECIPE_ITEM_COLLECTION = "Recipe Items";
-    private static final String FAVORITES_COLLECTIONS = "Favorites";
+    private static final String FAVORITES_COLLECTION = "Favorites";
     private static final String COMMENTS_COLLECTION = "Comments";
     private static final String REPLIES_COLLECTION = "Replies";
 
@@ -32,12 +32,15 @@ public class FirebaseUtil {
     public static CollectionReference retrieveRecipeItemsCollection() {
         return FirebaseFirestore.getInstance().collection(RECIPE_ITEM_COLLECTION);
     }
+
     public static CollectionReference retrieveFavoritesCollection() {
-        return FirebaseFirestore.getInstance().collection(FAVORITES_COLLECTIONS);
+        return FirebaseFirestore.getInstance().collection(FAVORITES_COLLECTION);
     }
+
     public static CollectionReference retrieveCommentsCollection() {
         return FirebaseFirestore.getInstance().collection(COMMENTS_COLLECTION);
     }
+
     public static CollectionReference retrieveRepliesCollection() {
         return FirebaseFirestore.getInstance().collection(REPLIES_COLLECTION);
     }

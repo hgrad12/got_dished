@@ -15,20 +15,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gotdished.model.RecipeItem;
 import com.example.gotdished.adapter.RecipeItemRecyclerAdapter;
+import com.example.gotdished.util.FavoriteValues;
 import com.example.gotdished.util.FirebaseUtil;
 import com.example.gotdished.util.RecipeItemValues;
 import com.example.gotdished.util.UserApi;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class FavoritesFragment extends Fragment implements RecipeItemRecyclerAdapter.OnRecipeItemClickListener {
-    private static final String TAG = "FavoritesFragment";
+    private static final String TAG = FavoritesFragment.class.getSimpleName();
 //    private TextView noEntry;
     private RecyclerView recyclerView;
     private RecipeItemRecyclerAdapter adapter;
     private ArrayList<RecipeItem> listOfRecipeItems;
     private static final String FAVORITE_ITEMS = "favorite_items";
+    private String userId = new UserApi().getInstance().getUserId();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,40 +40,49 @@ public class FavoritesFragment extends Fragment implements RecipeItemRecyclerAda
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        FirebaseUtil.retrieveFavoritesCollection()
+                .whereEqualTo(FavoriteValues.USER_UUID, userId)
+                .limit(25)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) return;
+                    Log.d(TAG, "Favorites was successful");
+
+                    if (Objects.requireNonNull(task.getResult()).getDocuments().isEmpty()) {
+//                            noEntry.setVisibility(View.VISIBLE);
+                        return;
+                    }
+
+                    Log.d(TAG, "Conditions were met");
+
+                    for (DocumentSnapshot snapshot: task.getResult().getDocuments()) {
+                        Long likes = snapshot.getLong(RecipeItemValues.NUMBER_OF_LIKES);
+                        RecipeItem item = new RecipeItem(snapshot.getString(RecipeItemValues.UUID),
+                                snapshot.getString(RecipeItemValues.NAME),
+                                snapshot.getString(RecipeItemValues.TIME_TO_COMPLETION),
+                                snapshot.getString(RecipeItemValues.IMAGE_URI),
+                                snapshot.getString(RecipeItemValues.CATEGORY), (likes == null)?0l:likes);
+                        if (listOfRecipeItems.contains(item))
+                            continue;
+                        listOfRecipeItems.add(item);
+                    }
+                    adapter = new RecipeItemRecyclerAdapter(getContext(), listOfRecipeItems, userId, this);
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }).addOnFailureListener(error -> {
+            Log.d(TAG, "Issue retrieving favorites list");
+        });
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         if (savedInstanceState != null) {
             listOfRecipeItems.addAll(savedInstanceState.getParcelableArrayList(FAVORITE_ITEMS));
-        } else {
-            FirebaseUtil.retrieveRecipeItemsCollection()
-                    .whereEqualTo("user_uuid", new UserApi().getInstance().getUserId())
-                    .limit(25)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task == null) return;
-
-                        if (!task.isSuccessful()) return;
-
-                        if (task.getResult().getDocuments().isEmpty()) {
-//                            noEntry.setVisibility(View.VISIBLE);
-                            return;
-                        }
-
-                        for (DocumentSnapshot snapshot: task.getResult().getDocuments()) {
-                            Long likes = snapshot.getLong(RecipeItemValues.NUMBER_OF_LIKES);
-                            listOfRecipeItems.add(new RecipeItem(snapshot.getString(RecipeItemValues.UUID),
-                                    snapshot.getString(RecipeItemValues.NAME),
-                                    snapshot.getString(RecipeItemValues.TIME_TO_COMPLETION),
-                                    snapshot.getString(RecipeItemValues.IMAGE_URI),
-                                    snapshot.getString(RecipeItemValues.CATEGORY), (likes == null)?0l:likes));
-                        }
-//                        adapter = new RecipeItemRecyclerAdapter(listOfRecipeItems, ,this);
-//                        recyclerView.setAdapter(adapter);
-                        adapter.notifyDataSetChanged();
-                    }).addOnFailureListener(error -> {
-                Log.d(TAG, "Issue retrieving favorites list");
-            });
         }
     }
 

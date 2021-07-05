@@ -50,7 +50,6 @@ public class RecipesFragment extends Fragment implements RecipeItemRecyclerAdapt
 
         FirebaseUtil.retrieveRecipeItemsCollection().limit(25)
                 .get().addOnCompleteListener(task -> {
-            if (task == null) return;
 
             if (!task.isSuccessful()) return;
 

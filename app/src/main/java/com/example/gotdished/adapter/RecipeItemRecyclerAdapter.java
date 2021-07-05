@@ -23,6 +23,7 @@ import com.example.gotdished.util.FirebaseUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -154,7 +155,7 @@ public class RecipeItemRecyclerAdapter extends RecyclerView.Adapter<RecipeItemRe
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if (queryDocumentSnapshots.isEmpty()) {
-                            favorites.document().set(new Favorite(userId, listOfRecipes.get(position)).toMap());
+                            favorites.document().set(new Favorite(userId, Timestamp.now(), listOfRecipes.get(position)).toMap());
                             return;
                         }
 
