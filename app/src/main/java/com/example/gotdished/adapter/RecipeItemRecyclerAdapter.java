@@ -20,6 +20,8 @@ import com.example.gotdished.model.Favorite;
 import com.example.gotdished.model.RecipeItem;
 import com.example.gotdished.util.FavoriteValues;
 import com.example.gotdished.util.FirebaseUtil;
+import com.example.gotdished.util.RecipeItemValues;
+import com.example.gotdished.util.RecipeValues;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -40,16 +42,18 @@ import java.util.Map;
 public class RecipeItemRecyclerAdapter extends RecyclerView.Adapter<RecipeItemRecyclerAdapter.ViewHolder> {
     private static final String TAG = RecipeItemRecyclerAdapter.class.getName();
     private final List<RecipeItem> listOfRecipes;
-    private OnRecipeItemClickListener onClickListener;
+    private final OnRecipeItemClickListener onClickListener;
     private final Context context;
     private final String userId;
+    private final boolean favorites_flag;
 
-    public RecipeItemRecyclerAdapter(Context context, List<RecipeItem> listOfRecipes, String userId,
+    public RecipeItemRecyclerAdapter(Context context, List<RecipeItem> listOfRecipes, String userId, boolean favorites,
                                      OnRecipeItemClickListener onRecipeItemClickListener) {
         this.context = context;
         this.listOfRecipes = listOfRecipes;
         this.userId = userId;
         onClickListener = onRecipeItemClickListener;
+        this.favorites_flag = favorites;
     }
 
     @NonNull
@@ -84,6 +88,7 @@ public class RecipeItemRecyclerAdapter extends RecyclerView.Adapter<RecipeItemRe
         View view;
         public TextView name, ttc, category;
         public ImageView image;
+        public ImageButton like;
         OnRecipeItemClickListener onRecipeItemClickListener;
         public ViewHolder(@NonNull View itemView, OnRecipeItemClickListener onRecipeItemClickListener) {
             super(itemView);
@@ -123,8 +128,16 @@ public class RecipeItemRecyclerAdapter extends RecyclerView.Adapter<RecipeItemRe
                     likeButton.setImageResource(R.drawable.ic_baseline_favorite_48_red);
                     numOfLikes.setTextColor(Color.RED);
                 }else {
-                    likeButton.setImageResource(R.drawable.ic_baseline_favorite_border_48);
-                    numOfLikes.setTextColor(Color.GRAY);
+                    if (favorites_flag && !listOfRecipes.isEmpty()) {
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, listOfRecipes.size());
+                        listOfRecipes.remove(position);
+                    }
+                    else {
+
+                        likeButton.setImageResource(R.drawable.ic_baseline_favorite_border_48);
+                        numOfLikes.setTextColor(Color.GRAY);
+                    }
                 }
 
             }

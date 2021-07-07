@@ -69,7 +69,7 @@ public class RecipesFragment extends Fragment implements RecipeItemRecyclerAdapt
                     continue;
                 listOfRecipeItems.add(item);
             }
-            adapter = new RecipeItemRecyclerAdapter(getContext(), listOfRecipeItems, api.getUserId(), this);
+            adapter = new RecipeItemRecyclerAdapter(getContext(), listOfRecipeItems, api.getUserId(), false,this);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }).addOnFailureListener(e -> Log.d(TAG, "issue retrieving recipe items."));
