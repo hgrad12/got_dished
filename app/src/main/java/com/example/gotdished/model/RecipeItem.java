@@ -2,10 +2,14 @@ package com.example.gotdished.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
+import androidx.databinding.BindingAdapter;
 
+import com.example.gotdished.R;
 import com.example.gotdished.util.RecipeItemValues;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -142,5 +146,10 @@ public class RecipeItem implements Parcelable {
         RecipeItem o = (RecipeItem)obj;
 
         return Objects.equals(recipeUuid, o.getRecipeUuid());
+    }
+
+    @BindingAdapter("android:loadImage")
+    public static void loadImage(ImageView imageView, String imageUrl) {
+        Picasso.get().load(imageUrl).placeholder(R.drawable.dish_placeholder).fit().into(imageView);
     }
 }

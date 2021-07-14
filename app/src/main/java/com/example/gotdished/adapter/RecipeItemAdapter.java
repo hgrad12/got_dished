@@ -1,23 +1,27 @@
 package com.example.gotdished.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gotdished.R;
+import com.example.gotdished.RecipeDetailsActivity;
+import com.example.gotdished.databinding.RecipesRow2Binding;
+import com.example.gotdished.handler.CustomClickListener;
 import com.example.gotdished.model.Favorite;
 import com.example.gotdished.model.RecipeItem;
 import com.example.gotdished.util.FirebaseUtil;
+import com.example.gotdished.util.UserApi;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
@@ -26,85 +30,75 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.squareup.picasso.Picasso;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class RecipeItemRecyclerAdapter extends RecyclerView.Adapter<RecipeItemRecyclerAdapter.ViewHolder> {
-    private static final String TAG = RecipeItemRecyclerAdapter.class.getName();
-    private final List<RecipeItem> listOfRecipes;
-    private final OnRecipeItemClickListener onClickListener;
+public class RecipeItemAdapter extends RecyclerView.Adapter<RecipeItemAdapter.ViewHolder> implements CustomClickListener {
+    private static final String TAG = RecipeItemAdapter.class.getName();
     private final Context context;
-    private final String userId;
-    private final boolean favorites_flag;
+    private List<RecipeItem> listOfRecipeItems;
+    private boolean favorites_flag;
 
-    public RecipeItemRecyclerAdapter(Context context, List<RecipeItem> listOfRecipes, String userId, boolean favorites,
-                                     OnRecipeItemClickListener onRecipeItemClickListener) {
+    public RecipeItemAdapter(Context context, boolean favorites_flag) {
         this.context = context;
-        this.listOfRecipes = listOfRecipes;
-        this.userId = userId;
-        onClickListener = onRecipeItemClickListener;
-        this.favorites_flag = favorites;
+        this.favorites_flag = favorites_flag;
     }
 
     @NonNull
+    @NotNull
     @Override
-    public RecipeItemRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipes_row, parent, false);
-        return new ViewHolder(view, onClickListener);
+    public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
+        RecipesRow2Binding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.recipes_row2, parent,false);
+        return new ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        RecipeItem recipeItem = listOfRecipes.get(position);
-        String imageUri;
-        holder.name.setText(recipeItem.getName());
-        holder.ttc.setText(recipeItem.getTimeToCompletion());
-        holder.category.setText(recipeItem.getCategory());
-
-        imageUri = recipeItem.getImageUri();
-
-        Picasso.get().load(imageUri).placeholder(R.drawable.dish_placeholder).fit().into(holder.image);
-
-        //Todo: add more details to the recipe card view
-        setLikes(holder.view, position);
+    public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
+        RecipeItem item = listOfRecipeItems.get(position);
+        holder.binding.setItem(item);
+        setLikes(holder.binding.getRoot(), position);
     }
 
     @Override
     public int getItemCount() {
-        return listOfRecipes.size();
+        return (listOfRecipeItems == null)? 0 :listOfRecipeItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        View view;
-        public TextView name, ttc, category;
-        public ImageView image;
-        OnRecipeItemClickListener onRecipeItemClickListener;
-        public ViewHolder(@NonNull View itemView, OnRecipeItemClickListener onRecipeItemClickListener) {
-            super(itemView);
-            view = itemView;
-            name = itemView.findViewById(R.id.recipe_name);
-            ttc = itemView.findViewById(R.id.recipe_ttc);
-            category = itemView.findViewById(R.id.recipe_category);
-            image = itemView.findViewById(R.id.recipe_image);
+    @Override
+    public void onRecipeItemListener(RecipeItem item) {
+        Intent intent = new Intent(context.getApplicationContext(), RecipeDetailsActivity.class);
+        intent.putExtra("recipeUuid", item.getRecipeUuid());
+        context.startActivity(intent);
+    }
 
-            this.onRecipeItemClickListener = onRecipeItemClickListener;
-            itemView.setOnClickListener(this);
-        }
+    public void setListOfRecipeItems(List<RecipeItem> items) {
+        listOfRecipeItems = items;
+        notifyDataSetChanged();
+    }
 
-        @SuppressLint("NonConstantResourceId")
-        @Override
-        public void onClick(View v) {
-            onRecipeItemClickListener.onRecipeItemClick(getAdapterPosition());
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private final RecipesRow2Binding binding;
+        public ViewHolder(@NonNull RecipesRow2Binding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onRecipeItemListener(binding.getItem());
+                }
+            });
         }
     }
 
     private void setLikes(View view, final int position) {
+        String userId = new UserApi().getInstance().getUserId();
 
         final CollectionReference favorites = FirebaseUtil.retrieveFavoritesCollection();
 
         Query query = favorites.whereEqualTo("user_uuid",  userId)
-                .whereEqualTo("recipe_uuid", listOfRecipes.get(position).getRecipeUuid());
+                .whereEqualTo("recipe_uuid", listOfRecipeItems.get(position).getRecipeUuid());
 
         final ImageButton likeButton = view.findViewById(R.id.recipe_like_image);
         final TextView numOfLikes = view.findViewById(R.id.recipe_num_likes);
@@ -118,10 +112,10 @@ public class RecipeItemRecyclerAdapter extends RecyclerView.Adapter<RecipeItemRe
                     likeButton.setImageResource(R.drawable.ic_baseline_favorite_48_red);
                     numOfLikes.setTextColor(Color.RED);
                 }else {
-                    if (favorites_flag && !listOfRecipes.isEmpty()) {
+                    if (favorites_flag && !listOfRecipeItems.isEmpty()) {
                         notifyItemRemoved(position);
-                        notifyItemRangeChanged(position, listOfRecipes.size());
-                        listOfRecipes.remove(position);
+                        notifyItemRangeChanged(position, listOfRecipeItems.size());
+                        listOfRecipeItems.remove(position);
                     }
                     else {
 
@@ -158,7 +152,7 @@ public class RecipeItemRecyclerAdapter extends RecyclerView.Adapter<RecipeItemRe
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if (queryDocumentSnapshots.isEmpty()) {
-                            favorites.document().set(new Favorite(userId, Timestamp.now(), listOfRecipes.get(position)).toMap());
+                            favorites.document().set(new Favorite(userId, Timestamp.now(), listOfRecipeItems.get(position)).toMap());
                             return;
                         }
 
@@ -171,9 +165,5 @@ public class RecipeItemRecyclerAdapter extends RecyclerView.Adapter<RecipeItemRe
             }
         });
 
-    }
-
-    public interface OnRecipeItemClickListener{
-        void onRecipeItemClick(int position);
     }
 }

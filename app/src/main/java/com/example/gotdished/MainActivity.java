@@ -1,11 +1,10 @@
 package com.example.gotdished;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.gotdished.util.FirebaseUtil;
 import com.example.gotdished.util.UserApi;
@@ -16,7 +15,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
     private static final String TAG = "MainActivity.class";
     private final Handler mWaitHandler = new Handler();
 
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Intent intent;
                     if (currentUser != null) {
-                        intent = new Intent(MainActivity.this, RecipesActivity.class);
+                        intent = new Intent(MainActivity.this, Recipes2Activity.class);
                     } else {
                         intent = new Intent(MainActivity.this, LoginActivity.class);
                     }

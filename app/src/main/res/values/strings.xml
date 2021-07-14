@@ -78,4 +78,11 @@
     <string name="confirmation">Confirmation</string>
     <string name="like_image_button">Like image button</string>
     <string name="likes_placeholder">1000</string>
+    <string name="title_activity_recipes2">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="recipes">Recipes</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
 </resources>
